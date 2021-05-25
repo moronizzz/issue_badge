@@ -20,6 +20,7 @@ def parse_webhook_body(body):
 
 
 def parse_webhook_data(input_data):
+    input_data = input_to_obj(input_data)
     if (
         input_data.action == "labeled"
         and input_data.label.name == "accepted"
@@ -28,9 +29,13 @@ def parse_webhook_data(input_data):
         return parse_webhook_body(input_data.issue.body)
 
 
+def input_to_obj(input_data):
+    return json.loads(input_data, object_hook=lambda d: SimpleNamespace(**d))
+
+
 def main():
     with open("input_example.json") as f:
-        input_data = json.loads(f.read(), object_hook=lambda d: SimpleNamespace(**d))
+        input_data = f.read()
     print(parse_webhook_data(input_data))
 
 
