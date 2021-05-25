@@ -14,9 +14,13 @@ def parse_webhook_body(body):
             result.append(line.split("**")[2].strip())
         if line.startswith("**Email:**"):
             result.append(line.split("**")[2].strip())
-        if line.startswith("**Linkedin Profile:** "):
+        if line.startswith("**Linkedin Profile:**"):
             result.append(line.split("**")[2].strip())
     return ",".join(result)
+
+
+def input_to_obj(input_data):
+    return json.loads(input_data, object_hook=lambda d: SimpleNamespace(**d))
 
 
 def parse_webhook_data(input_data):
@@ -27,10 +31,6 @@ def parse_webhook_data(input_data):
         and input_data.sender.login in APPROVERS_LIST
     ):
         return parse_webhook_body(input_data.issue.body)
-
-
-def input_to_obj(input_data):
-    return json.loads(input_data, object_hook=lambda d: SimpleNamespace(**d))
 
 
 def main():
