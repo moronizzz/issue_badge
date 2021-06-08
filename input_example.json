@@ -1,7 +1,7 @@
 {
   "action": "labeled",
   "issue": {
-    "url": "https://api.github.com/repos/datastaxdevs/workshop-introduction-to-nosql/issues/76",
+    "url": "https://api.github.com/repos/moronizzz/issues/issues/1",
     "repository_url": "https://api.github.com/repos/datastaxdevs/workshop-introduction-to-nosql",
     "labels_url": "https://api.github.com/repos/datastaxdevs/workshop-introduction-to-nosql/issues/76/labels{/name}",
     "comments_url": "https://api.github.com/repos/datastaxdevs/workshop-introduction-to-nosql/issues/76/comments",
