@@ -38,7 +38,6 @@ class WebhookData:
                 self.student_name = name_regex.group("name").strip()
             if email_regex:
                 self.student_email = email_regex.group("email").strip()
-        return {"name": self.student_name, "email": self.student_email}
 
     def parse_webhook_data(self):
         if (
@@ -46,15 +45,24 @@ class WebhookData:
             and self.input_data.label.name == "accepted"
             and self.input_data.sender.login in APPROVERS_LIST
         ):
-            return self.parse_webhook_body()
+            self.parse_webhook_body()
+            return {
+                "name": self.student_name,
+                "email": self.student_email,
+                "issue_url": self.issue_url,
+            }
 
-    def comment_create(self):
-        headers = {
-            "Accept": "application/vnd.github.v3+json",
-            "Authorization": f"token {GH_TOKEN}",
-        }
-        url = f"{ self.issue_url }/comments"
-        payload = {"body": BOT_MESSAGE.format(name=self.student_name)}
+
+def gh_comment_create(**kwargs):
+    issue_url = kwargs.get("issue_url", None)
+    name = kwargs.get("name", None)
+    headers = {
+        "Accept": "application/vnd.github.v3+json",
+        "Authorization": f"token {GH_TOKEN}",
+    }
+    if issue_url:
+        url = f"{ issue_url }/comments"
+        payload = {"body": BOT_MESSAGE.format(name=name)}
         r = requests.post(url, json=payload, headers=headers)
         return r.status_code
 
@@ -66,7 +74,7 @@ def main():
     wd = WebhookData(input_data=input_data)
     result = wd.parse_webhook_data()
     if "name" in result:
-        wd.comment_create()
+        gh_comment_create(**result)
 
 
 if __name__ == "__main__":
