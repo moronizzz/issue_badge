@@ -8,15 +8,13 @@ APPROVERS_LIST = ["HadesArchitect"]
 
 
 def parse_webhook_body(body):
-    result = []
+    result = {}
     for line in body.split("\n"):
         if line.startswith("**Name:**"):
-            result.append(line.split("**")[2].strip())
+            result["name"] = line.split("**")[2].strip()
         if line.startswith("**Email:**"):
-            result.append(line.split("**")[2].strip())
-        if line.startswith("**Linkedin Profile:**"):
-            result.append(line.split("**")[2].strip())
-    return ",".join(result)
+            result["email"] = line.split("**")[2].strip()
+    return result
 
 
 def input_to_obj(input_data):
